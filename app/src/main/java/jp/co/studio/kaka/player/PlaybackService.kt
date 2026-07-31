@@ -1,5 +1,6 @@
 package jp.co.studio.kaka.player
 
+import androidx.media3.datasource.DefaultDataSource
 import androidx.media3.datasource.okhttp.OkHttpDataSource
 import androidx.media3.exoplayer.ExoPlayer
 import androidx.media3.exoplayer.source.DefaultMediaSourceFactory
@@ -28,7 +29,13 @@ class PlaybackService : MediaSessionService() {
 
     override fun onCreate() {
         super.onCreate()
-        val dataSourceFactory = OkHttpDataSource.Factory(streamingHttpClient)
+        // OkHttpDataSource only understands http(s):// - downloaded tracks are played from
+        // file:// URIs (see QueueBuilder). DefaultDataSource routes by URI scheme: http(s)
+        // goes to the OkHttp factory below, file/content/asset go to Media3's built-in
+        // FileDataSource/ContentDataSource/AssetDataSource. Without this wrapper, local
+        // playback fails with "Malformed URL" since OkHttp rejects non-http(s) URIs outright.
+        val httpDataSourceFactory = OkHttpDataSource.Factory(streamingHttpClient)
+        val dataSourceFactory = DefaultDataSource.Factory(this, httpDataSourceFactory)
         val player = ExoPlayer.Builder(this)
             .setMediaSourceFactory(DefaultMediaSourceFactory(dataSourceFactory))
             .build()
