@@ -24,6 +24,8 @@ import jp.co.studio.kaka.domain.repository.LyricsRepository
 import jp.co.studio.kaka.domain.repository.MusicRepository
 import jp.co.studio.kaka.domain.repository.RecommendationRepository
 import jp.co.studio.kaka.domain.repository.SearchRepository
+import jp.co.studio.kaka.player.MediaControllerRepository
+import jp.co.studio.kaka.player.MediaControllerRepositoryImpl
 import javax.inject.Singleton
 
 @Module
@@ -69,4 +71,8 @@ abstract class RepositoryModule {
     @Binds
     @Singleton
     abstract fun bindTokenStore(impl: SecureTokenStore): TokenStore
+
+    @Binds
+    @Singleton
+    abstract fun bindMediaControllerRepository(impl: MediaControllerRepositoryImpl): MediaControllerRepository
 }
