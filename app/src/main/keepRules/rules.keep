@@ -1,0 +1,17 @@
+# Add project specific R8 rules here.
+# AGP will combine all keep rule files in src/main/keepRules to pass to R8
+#
+# For more details, see
+#   https://d.android.com/r/tools/r8/keep-rules
+
+# kotlinx.serialization: keep generated serializers for our network DTOs. Release optimization is
+# currently disabled (see app/build.gradle.kts buildTypes.release.optimization), so these rules
+# are inert today but must be here before optimization is ever turned on.
+-keepattributes *Annotation*, InnerClasses
+-keep,includedescriptorclasses class jp.co.studio.kaka.data.remote.dto.**$$serializer { *; }
+-keepclassmembers class jp.co.studio.kaka.data.remote.dto.** {
+    *** Companion;
+}
+-keepclasseswithmembers class jp.co.studio.kaka.data.remote.dto.** {
+    kotlinx.serialization.KSerializer serializer(...);
+}
