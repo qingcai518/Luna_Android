@@ -2,6 +2,7 @@ package jp.co.studio.kaka.ui.downloaded
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.combinedClickable
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
@@ -11,9 +12,11 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
+import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -32,22 +35,27 @@ import jp.co.studio.kaka.domain.model.DownloadedMusic
 import jp.co.studio.kaka.ui.components.EmptyState
 import jp.co.studio.kaka.ui.components.LoadingState
 
-@OptIn(ExperimentalFoundationApi::class)
+@OptIn(ExperimentalFoundationApi::class, ExperimentalMaterial3Api::class)
 @Composable
 fun DownloadedScreen(viewModel: DownloadedViewModel = hiltViewModel()) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     var pendingDelete by rememberSaveable { mutableStateOf<Long?>(null) }
 
-    when {
-        uiState.isLoading -> LoadingState()
-        uiState.musics.isEmpty() -> EmptyState(message = "还没有已下载的歌曲")
-        else -> LazyColumn(modifier = Modifier.fillMaxSize()) {
-            items(uiState.musics, key = { it.id }) { music ->
-                DownloadedRow(
-                    music = music,
-                    onClick = { viewModel.play(uiState.musics, uiState.musics.indexOf(music)) },
-                    onLongClick = { pendingDelete = music.id },
-                )
+    Column(modifier = Modifier.fillMaxSize()) {
+        TopAppBar(title = { Text("已下载") })
+        Box(modifier = Modifier.weight(1f)) {
+            when {
+                uiState.isLoading -> LoadingState()
+                uiState.musics.isEmpty() -> EmptyState(message = "还没有已下载的歌曲")
+                else -> LazyColumn(modifier = Modifier.fillMaxSize()) {
+                    items(uiState.musics, key = { it.id }) { music ->
+                        DownloadedRow(
+                            music = music,
+                            onClick = { viewModel.play(uiState.musics, uiState.musics.indexOf(music)) },
+                            onLongClick = { pendingDelete = music.id },
+                        )
+                    }
+                }
             }
         }
     }

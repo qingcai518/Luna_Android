@@ -9,10 +9,12 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
@@ -27,6 +29,7 @@ import jp.co.studio.kaka.ui.components.ErrorState
 import jp.co.studio.kaka.ui.components.MusicRow
 import jp.co.studio.kaka.ui.player.PlayerViewModel
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SearchScreen(
     onArtistClick: (Artist) -> Unit,
@@ -37,6 +40,7 @@ fun SearchScreen(
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
     Column(modifier = Modifier.fillMaxSize()) {
+        TopAppBar(title = { Text("检索") })
         OutlinedTextField(
             value = uiState.keyword,
             onValueChange = viewModel::onKeywordChange,
