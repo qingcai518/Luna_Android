@@ -15,6 +15,7 @@ import jp.co.studio.kaka.data.repository.LyricsRepositoryImpl
 import jp.co.studio.kaka.data.repository.MusicRepositoryImpl
 import jp.co.studio.kaka.data.repository.RecommendationRepositoryImpl
 import jp.co.studio.kaka.data.repository.SearchRepositoryImpl
+import jp.co.studio.kaka.data.repository.SettingsRepositoryImpl
 import jp.co.studio.kaka.domain.repository.ArtistRepository
 import jp.co.studio.kaka.domain.repository.AuthRepository
 import jp.co.studio.kaka.domain.repository.CategoryRepository
@@ -24,6 +25,7 @@ import jp.co.studio.kaka.domain.repository.LyricsRepository
 import jp.co.studio.kaka.domain.repository.MusicRepository
 import jp.co.studio.kaka.domain.repository.RecommendationRepository
 import jp.co.studio.kaka.domain.repository.SearchRepository
+import jp.co.studio.kaka.domain.repository.SettingsRepository
 import jp.co.studio.kaka.player.MediaControllerRepository
 import jp.co.studio.kaka.player.MediaControllerRepositoryImpl
 import javax.inject.Singleton
@@ -75,4 +77,8 @@ abstract class RepositoryModule {
     @Binds
     @Singleton
     abstract fun bindMediaControllerRepository(impl: MediaControllerRepositoryImpl): MediaControllerRepository
+
+    @Binds
+    @Singleton
+    abstract fun bindSettingsRepository(impl: SettingsRepositoryImpl): SettingsRepository
 }

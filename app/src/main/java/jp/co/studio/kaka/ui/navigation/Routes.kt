@@ -11,6 +11,7 @@ object MainRoutes {
     const val DOWNLOADED = "main/downloaded"
     const val RECOMMEND = "main/recommend"
     const val PROFILE = "main/profile"
+    const val SETTINGS = "main/settings"
 
     /** idType is "artist" or "category" - matches jp.co.studio.kaka.util.MusicListSource name (lowercase). */
     const val MUSIC_LIST = "main/musicList/{idType}/{id}/{name}"

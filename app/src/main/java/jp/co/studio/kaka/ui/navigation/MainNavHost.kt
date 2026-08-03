@@ -14,6 +14,7 @@ import jp.co.studio.kaka.ui.musiclist.MusicListScreen
 import jp.co.studio.kaka.ui.profile.ProfileScreen
 import jp.co.studio.kaka.ui.recommend.RecommendScreen
 import jp.co.studio.kaka.ui.search.SearchScreen
+import jp.co.studio.kaka.ui.settings.SettingsScreen
 
 /**
  * Single shared nav graph for all 5 bottom-nav tabs (standard Navigation Compose bottom-nav
@@ -53,7 +54,11 @@ fun MainNavHost(navController: NavHostController = rememberNavController()) {
                         restoreState = true
                     }
                 },
+                onNavigateToSettings = { navController.navigate(MainRoutes.SETTINGS) },
             )
+        }
+        composable(MainRoutes.SETTINGS) {
+            SettingsScreen(onBackClick = { navController.popBackStack() })
         }
         composable(
             route = MainRoutes.MUSIC_LIST,
