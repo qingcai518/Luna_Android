@@ -65,6 +65,16 @@
     <string name="settings_language">言語</string>
     <string name="theme_light">ライト</string>
     <string name="theme_dark">ダーク</string>
+    <string name="settings_theme">テーマ</string>
+    <string name="settings_theme_follow_hint">システムに従う場合、ライトではお選びのライトテーマ、ダークではお選びのダークテーマが使われます。</string>
+    <string name="theme_night">夜空</string>
+    <string name="theme_aurora">オーロラ</string>
+    <string name="theme_sunset">夕暮れ</string>
+    <string name="theme_onyx">オニキス</string>
+    <string name="theme_moonlight">月光</string>
+    <string name="theme_paper">和紙</string>
+    <string name="theme_sakura">桜</string>
+    <string name="theme_mint">ミント</string>
 
     <string name="home_greeting_morning">おはようございます</string>
     <string name="home_greeting_afternoon">こんにちは</string>

@@ -26,12 +26,11 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
 import jp.co.studio.kaka.domain.model.Category
-import jp.co.studio.kaka.ui.theme.MoonText
 import jp.co.studio.kaka.ui.theme.isDark
 
 /**
  * 首页分类：色彩卡片。色相由分类 id 派生（同一分类颜色稳定），封面斜切在右下角。
- * 深色主题：低亮度色相渐变 + 白字；浅色主题：浅色渐变 + 深靛色字。
+ * 深色主题：低亮度色相渐变 + 白字；浅色主题：浅色渐变 + 主题的文字色（深色）。
  */
 @Composable
 fun CategoryCard(category: Category, onClick: () -> Unit, modifier: Modifier = Modifier) {
@@ -42,7 +41,7 @@ fun CategoryCard(category: Category, onClick: () -> Unit, modifier: Modifier = M
     } else {
         Brush.linearGradient(listOf(Color.hsv(hue, 0.12f, 0.98f), Color.hsv(hue, 0.20f, 0.92f)))
     }
-    val ink = if (dark) Color.White else MoonText
+    val ink = if (dark) Color.White else MaterialTheme.colorScheme.onBackground
     val shape = RoundedCornerShape(20.dp)
 
     Box(

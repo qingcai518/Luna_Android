@@ -38,10 +38,16 @@ ViewModel 里**不要**持有 `Context` 或直接拼本地化字符串。错误/
 
 ## 主题
 
-`ui/theme/`：品牌色 Night（深色）/ Moon（浅色）两套 `ColorScheme`（靛蓝底 + 金色强调，对应 iOS），另有 `HeroTopDark…HeroInk` 等主角卡专用色。
+共 8 个主题，和 iOS 的 `AppTheme`（`ThemeManager.swift`）名字、配色一一对应：深色 夜空 Night / 极光 Aurora / 落日 Sunset / 曜石 Onyx，浅色 月白 Moonlight / 纸白 Paper / 樱花 Sakura / 薄荷 Mint。
 
-- `LunaTheme(dynamicColor = false)` 默认**关闭**动态取色：开着的话 Android 12+ 会用壁纸色覆盖品牌色。想恢复 Material You 传 `true`。
-- 强调色用 `MaterialTheme.colorScheme.primary`；判断深浅用扩展属性 `ColorScheme.isDark`，不要再读 `isSystemInDarkTheme()`（设置页可以手动指定深/浅）。
+- `domain/model/AppThemeId`（声明顺序 = 设置页显示顺序，前 4 个深色、后 4 个浅色）；配色在 `ui/theme/Palette.kt` 的 `paletteOf(id)`，`toColorScheme()` 生成 Material 的 `ColorScheme`。**改配色时同步改 iOS 的 `ThemeManager.swift`。**
+- 用户设置有两项：`ThemeMode`（跟随系统 / 浅色 / 深色）+ 所选主题 `themeId`（DataStore 里的 `theme_id`）。实际生效的主题由 `resolveAppTheme(mode, selected, systemDark)` 算：先由模式（跟随系统时看系统）定深 / 浅，所选主题明暗一致就用它，不一致退回默认的夜空 / 月白。`MainActivity` 算出后传给 `LunaTheme(theme = …)`。
+- 设置页选主题（`SettingsViewModel.selectTheme`）：强制了浅 / 深时会把模式改成和所选主题一致，保证点了就能看到变化；跟随系统时不动模式（系统是浅色就用所选的浅色主题）。**先写主题再写模式**，反过来会闪一下默认主题。读当前模式用 `settingsRepository.themeMode.first()`，不要读 `themeMode.value`（`WhileSubscribed` 没人订阅时永远是初始值）。
+- **每个主题必须满足 accent 与 background、surface 的对比度 ≥ 4.5:1**：全 App 是「强调色做底 + 页面底色做字」（按钮、播放键），强调色同时当文字色（当前播放的标题）。`PaletteContrastTest` 守着这条，还要求正文对背景 ≥ 7:1、主角卡白字 ≥ 4.5:1、主角卡强调色对 `HeroInk` ≥ 4.5:1。新增主题先算好对比度再加。
+- 首页主角卡始终是深色渐变 + 白字，渐变和强调色取自主题（`LocalHeroColors`，由 `LunaTheme` 提供）；强调色上的按钮图标固定用 `HeroInk`。
+- `MainActivity` 里用 `SystemBarStyle.auto(...) { theme.isDark }` 让状态栏 / 导航栏图标的深浅跟着**主题**走，不要用默认的 `enableEdgeToEdge()`：手动选了和系统相反的明暗时，默认写法会让时钟和电量图标和背景同色。
+- `LunaTheme(dynamicColor = false)` 默认**关闭**动态取色：开着的话 Android 12+ 会用壁纸色覆盖品牌色。想恢复 Material You 传 `true`（只按主题的明暗选深 / 浅）。
+- 强调色用 `MaterialTheme.colorScheme.primary`；判断深浅用扩展属性 `ColorScheme.isDark`，不要再读 `isSystemInDarkTheme()`。不随主题变的颜色只有 `Color.kt` 里的 `HeroInk`、`LunaRed`。
 - 共用组件在 `ui/components/`：`PageHeader`（页面头部：标签 / 大标题 / 副标题 / 主次按钮，推荐页和已下载页在用；首页用自己的问候语，我的页用头像卡）、`Skeleton`（`shimmer()`、`SongRowSkeleton`）、`Avatar`（`AvatarCircle`，无头像时按名字取色相 + 首字）、`MusicRow`（歌曲行，支持 `reason` / `detail` / `isCurrent` / `trailing`）。歌曲行都走 `MusicRow`，不要各页自己画。
 
 ## 网络与认证

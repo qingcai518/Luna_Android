@@ -59,13 +59,8 @@ import jp.co.studio.kaka.ui.components.CategoryCard
 import jp.co.studio.kaka.ui.components.ErrorState
 import jp.co.studio.kaka.ui.components.SkeletonBlock
 import jp.co.studio.kaka.ui.player.PlayerViewModel
-import jp.co.studio.kaka.ui.theme.HeroAccent
-import jp.co.studio.kaka.ui.theme.HeroBottomDark
-import jp.co.studio.kaka.ui.theme.HeroBottomLight
 import jp.co.studio.kaka.ui.theme.HeroInk
-import jp.co.studio.kaka.ui.theme.HeroTopDark
-import jp.co.studio.kaka.ui.theme.HeroTopLight
-import jp.co.studio.kaka.ui.theme.isDark
+import jp.co.studio.kaka.ui.theme.LocalHeroColors
 import java.util.Calendar
 
 @Composable
@@ -129,7 +124,7 @@ internal fun HomeContent(
             state.hero?.let { hero ->
                 item {
                     HeroCard(
-                        hero = hero,
+                        recommendation = hero,
                         isPlaying = isPlaying && currentMusicId == hero.music.id,
                         onPlayClick = onHeroPlayClick,
                     )
@@ -233,15 +228,16 @@ private fun Greeting() {
 }
 
 /**
- * 主角卡：始终是深色渐变、白色文字（浅色主题下也是），强调色固定用金色。
+ * 主角卡：始终是深色渐变、白色文字（浅色主题下也是），强调色取自当前主题（金 / 青绿 / 珊瑚 / 橙 / 蓝 / 粉 / 绿）。
  * 首页唯一的大字、大图、强调色按钮，播放键在右下角，一步开始。
  */
 @Composable
-private fun HeroCard(hero: Recommendation, isPlaying: Boolean, onPlayClick: () -> Unit) {
-    val dark = MaterialTheme.colorScheme.isDark
-    val top = if (dark) HeroTopDark else HeroTopLight
-    val bottom = if (dark) HeroBottomDark else HeroBottomLight
-    val music = hero.music
+private fun HeroCard(recommendation: Recommendation, isPlaying: Boolean, onPlayClick: () -> Unit) {
+    val colors = LocalHeroColors.current
+    val top = colors.top
+    val bottom = colors.bottom
+    val accent = colors.accent
+    val music = recommendation.music
 
     Box(
         modifier = Modifier
@@ -258,7 +254,7 @@ private fun HeroCard(hero: Recommendation, isPlaying: Boolean, onPlayClick: () -
                 .align(Alignment.TopEnd)
                 .offset(x = 40.dp, y = (-48).dp)
                 .size(220.dp)
-                .background(Brush.radialGradient(listOf(HeroAccent.copy(alpha = 0.5f), Color.Transparent)), CircleShape),
+                .background(Brush.radialGradient(listOf(accent.copy(alpha = 0.5f), Color.Transparent)), CircleShape),
         )
         // 斜放的封面
         Box(
@@ -295,12 +291,12 @@ private fun HeroCard(hero: Recommendation, isPlaying: Boolean, onPlayClick: () -
                     .padding(horizontal = 12.dp, vertical = 4.dp),
                 verticalAlignment = Alignment.CenterVertically,
             ) {
-                Icon(Icons.Filled.AutoAwesome, contentDescription = null, tint = HeroAccent, modifier = Modifier.size(12.dp))
+                Icon(Icons.Filled.AutoAwesome, contentDescription = null, tint = accent, modifier = Modifier.size(12.dp))
                 Spacer(Modifier.width(4.dp))
                 Text(
                     text = stringResource(R.string.home_hero_tag),
                     style = MaterialTheme.typography.labelMedium.copy(fontWeight = FontWeight.SemiBold),
-                    color = HeroAccent,
+                    color = accent,
                 )
             }
             Text(
@@ -315,7 +311,7 @@ private fun HeroCard(hero: Recommendation, isPlaying: Boolean, onPlayClick: () -
             if (meta.isNotEmpty()) {
                 Text(text = meta, style = MaterialTheme.typography.bodyMedium, color = Color.White.copy(alpha = 0.74f), modifier = Modifier.padding(top = 4.dp))
             }
-            hero.reason?.takeIf { it.isNotBlank() }?.let { reason ->
+            recommendation.reason?.takeIf { it.isNotBlank() }?.let { reason ->
                 Text(
                     text = reason,
                     style = MaterialTheme.typography.bodyMedium,
@@ -333,7 +329,7 @@ private fun HeroCard(hero: Recommendation, isPlaying: Boolean, onPlayClick: () -
                 .padding(20.dp)
                 .size(56.dp)
                 .clip(CircleShape)
-                .background(HeroAccent)
+                .background(accent)
                 .clickable(onClick = onPlayClick),
             contentAlignment = Alignment.Center,
         ) {

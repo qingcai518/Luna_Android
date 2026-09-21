@@ -6,6 +6,7 @@ import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.emptyPreferences
 import androidx.datastore.preferences.core.longPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
+import jp.co.studio.kaka.domain.model.AppThemeId
 import jp.co.studio.kaka.domain.model.ThemeMode
 import jp.co.studio.kaka.domain.model.User
 import kotlinx.coroutines.flow.Flow
@@ -25,6 +26,7 @@ class UserPreferencesDataStore @Inject constructor(
         val EMAIL = stringPreferencesKey("email")
         val AVATAR_URL = stringPreferencesKey("avatar_url")
         val THEME_MODE = stringPreferencesKey("theme_mode")
+        val THEME_ID = stringPreferencesKey("theme_id")
     }
 
     private val safePreferences: Flow<Preferences> = dataStore.data.catch { e ->
@@ -44,6 +46,13 @@ class UserPreferencesDataStore @Inject constructor(
         } ?: ThemeMode.SYSTEM
     }
 
+    /** 用户选的主题；读不出来（没选过、或以后删掉了某个主题）就用默认的「夜空」。 */
+    val themeId: Flow<AppThemeId> = safePreferences.map { prefs ->
+        prefs[Keys.THEME_ID]?.let { raw ->
+            runCatching { AppThemeId.valueOf(raw) }.getOrNull()
+        } ?: AppThemeId.NIGHT
+    }
+
     suspend fun saveUser(user: User) {
         dataStore.edit { prefs ->
             prefs[Keys.USER_ID] = user.userId
@@ -55,6 +64,10 @@ class UserPreferencesDataStore @Inject constructor(
 
     suspend fun setThemeMode(mode: ThemeMode) {
         dataStore.edit { prefs -> prefs[Keys.THEME_MODE] = mode.name }
+    }
+
+    suspend fun setThemeId(id: AppThemeId) {
+        dataStore.edit { prefs -> prefs[Keys.THEME_ID] = id.name }
     }
 
     suspend fun clearUser() {
