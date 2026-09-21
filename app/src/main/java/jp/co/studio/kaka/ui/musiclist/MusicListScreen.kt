@@ -15,8 +15,10 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import jp.co.studio.kaka.R
 import jp.co.studio.kaka.domain.model.DownloadState
 import jp.co.studio.kaka.ui.components.EmptyState
 import jp.co.studio.kaka.ui.components.ErrorState
@@ -32,6 +34,7 @@ fun MusicListScreen(
     playerViewModel: PlayerViewModel = hiltViewModel(),
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    val playerState by playerViewModel.uiState.collectAsStateWithLifecycle()
 
     Scaffold(
         topBar = {
@@ -39,7 +42,7 @@ fun MusicListScreen(
                 title = { Text(uiState.title) },
                 navigationIcon = {
                     IconButton(onClick = onBackClick) {
-                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "返回")
+                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = stringResource(R.string.common_back))
                     }
                 },
             )
@@ -48,8 +51,8 @@ fun MusicListScreen(
         when {
             uiState.isLoading -> LoadingState(modifier = Modifier.padding(innerPadding))
             uiState.errorMessage != null ->
-                ErrorState(message = uiState.errorMessage!!, onRetry = viewModel::load, modifier = Modifier.padding(innerPadding))
-            uiState.musics.isEmpty() -> EmptyState(message = "暂无歌曲", modifier = Modifier.padding(innerPadding))
+                ErrorState(message = uiState.errorMessage!!.asString(), onRetry = viewModel::load, modifier = Modifier.padding(innerPadding))
+            uiState.musics.isEmpty() -> EmptyState(message = stringResource(R.string.music_list_empty), modifier = Modifier.padding(innerPadding))
             else -> LazyColumn(modifier = Modifier.fillMaxSize().padding(innerPadding)) {
                 items(uiState.musics, key = { it.id }) { music ->
                     MusicRow(
@@ -60,6 +63,7 @@ fun MusicListScreen(
                         },
                         downloadState = uiState.downloadStates[music.id] ?: DownloadState.NotDownloaded,
                         onDownloadClick = { viewModel.downloadMusic(music) },
+                        isCurrent = playerState.currentMusic?.id == music.id,
                     )
                 }
             }

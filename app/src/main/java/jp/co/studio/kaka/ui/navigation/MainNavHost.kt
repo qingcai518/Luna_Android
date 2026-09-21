@@ -31,6 +31,13 @@ fun MainNavHost(navController: NavHostController = rememberNavController()) {
                 onCategoryClick = { category ->
                     navController.navigate(MainRoutes.musicList("category", category.id, category.name))
                 },
+                onNavigateToDownloaded = {
+                    navController.navigate(MainRoutes.DOWNLOADED) {
+                        popUpTo(navController.graph.findStartDestination().id) { saveState = true }
+                        launchSingleTop = true
+                        restoreState = true
+                    }
+                },
             )
         }
         composable(MainRoutes.SEARCH) {

@@ -3,8 +3,10 @@ package jp.co.studio.kaka.ui.auth
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import jp.co.studio.kaka.R
 import jp.co.studio.kaka.domain.repository.AuthRepository
 import jp.co.studio.kaka.util.ApiResult
+import jp.co.studio.kaka.util.UiText
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -33,9 +35,9 @@ class RegisterViewModel @Inject constructor(
             // Backend register endpoint returns no tokens/user - caller must log in separately afterwards.
             when (val result = authRepository.register(state.username, state.password, state.email)) {
                 is ApiResult.Success -> _uiState.update { it.copy(isLoading = false, registerSucceeded = true) }
-                is ApiResult.Error -> _uiState.update { it.copy(isLoading = false, errorMessage = result.message) }
+                is ApiResult.Error -> _uiState.update { it.copy(isLoading = false, errorMessage = UiText.Dynamic(result.message)) }
                 is ApiResult.NetworkError -> _uiState.update {
-                    it.copy(isLoading = false, errorMessage = "网络连接失败，请检查网络后重试")
+                    it.copy(isLoading = false, errorMessage = UiText.Resource(R.string.error_network))
                 }
             }
         }

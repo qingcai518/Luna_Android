@@ -22,9 +22,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import jp.co.studio.kaka.R
 
 @Composable
 fun RegisterScreen(
@@ -48,12 +50,12 @@ fun RegisterScreen(
                 .padding(horizontal = 32.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
-            Text(text = "注册账号", style = MaterialTheme.typography.headlineSmall)
+            Text(text = stringResource(R.string.register_title), style = MaterialTheme.typography.headlineSmall)
             Spacer(modifier = Modifier.height(24.dp))
             OutlinedTextField(
                 value = uiState.username,
                 onValueChange = viewModel::onUsernameChange,
-                label = { Text("用户名") },
+                label = { Text(stringResource(R.string.login_username)) },
                 singleLine = true,
                 keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
                 modifier = Modifier.fillMaxWidth(),
@@ -62,7 +64,7 @@ fun RegisterScreen(
             OutlinedTextField(
                 value = uiState.email,
                 onValueChange = viewModel::onEmailChange,
-                label = { Text("邮箱") },
+                label = { Text(stringResource(R.string.register_email)) },
                 singleLine = true,
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email, imeAction = ImeAction.Next),
                 modifier = Modifier.fillMaxWidth(),
@@ -71,7 +73,7 @@ fun RegisterScreen(
             OutlinedTextField(
                 value = uiState.password,
                 onValueChange = viewModel::onPasswordChange,
-                label = { Text("密码") },
+                label = { Text(stringResource(R.string.login_password)) },
                 singleLine = true,
                 visualTransformation = PasswordVisualTransformation(),
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password, imeAction = ImeAction.Next),
@@ -81,7 +83,7 @@ fun RegisterScreen(
             OutlinedTextField(
                 value = uiState.confirmPassword,
                 onValueChange = viewModel::onConfirmPasswordChange,
-                label = { Text("确认密码") },
+                label = { Text(stringResource(R.string.register_confirm_password)) },
                 singleLine = true,
                 visualTransformation = PasswordVisualTransformation(),
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password, imeAction = ImeAction.Done),
@@ -89,7 +91,7 @@ fun RegisterScreen(
             )
             uiState.errorMessage?.let { message ->
                 Spacer(modifier = Modifier.height(8.dp))
-                Text(text = message, color = MaterialTheme.colorScheme.error)
+                Text(text = message.asString(), color = MaterialTheme.colorScheme.error)
             }
             Spacer(modifier = Modifier.height(24.dp))
             Button(
@@ -100,12 +102,12 @@ fun RegisterScreen(
                 if (uiState.isLoading) {
                     CircularProgressIndicator(modifier = Modifier.height(20.dp), strokeWidth = 2.dp)
                 } else {
-                    Text("注册")
+                    Text(stringResource(R.string.register_button))
                 }
             }
             Spacer(modifier = Modifier.height(12.dp))
             TextButton(onClick = onNavigateBack) {
-                Text("已有账号？去登录")
+                Text(stringResource(R.string.register_go_login))
             }
         }
     }

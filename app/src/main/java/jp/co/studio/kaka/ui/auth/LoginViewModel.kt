@@ -3,8 +3,10 @@ package jp.co.studio.kaka.ui.auth
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import jp.co.studio.kaka.R
 import jp.co.studio.kaka.domain.repository.AuthRepository
 import jp.co.studio.kaka.util.ApiResult
+import jp.co.studio.kaka.util.UiText
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -35,9 +37,9 @@ class LoginViewModel @Inject constructor(
             _uiState.update { it.copy(isLoading = true, errorMessage = null) }
             when (val result = authRepository.login(state.username, state.password)) {
                 is ApiResult.Success -> _uiState.update { it.copy(isLoading = false, loginSucceeded = true) }
-                is ApiResult.Error -> _uiState.update { it.copy(isLoading = false, errorMessage = result.message) }
+                is ApiResult.Error -> _uiState.update { it.copy(isLoading = false, errorMessage = UiText.Dynamic(result.message)) }
                 is ApiResult.NetworkError -> _uiState.update {
-                    it.copy(isLoading = false, errorMessage = "网络连接失败，请检查网络后重试")
+                    it.copy(isLoading = false, errorMessage = UiText.Resource(R.string.error_network))
                 }
             }
         }

@@ -21,9 +21,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import jp.co.studio.kaka.R
 
 @Composable
 fun LoginScreen(
@@ -45,7 +47,7 @@ fun LoginScreen(
             OutlinedTextField(
                 value = uiState.username,
                 onValueChange = viewModel::onUsernameChange,
-                label = { Text("用户名") },
+                label = { Text(stringResource(R.string.login_username)) },
                 singleLine = true,
                 keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
                 modifier = Modifier.fillMaxWidth(),
@@ -54,7 +56,7 @@ fun LoginScreen(
             OutlinedTextField(
                 value = uiState.password,
                 onValueChange = viewModel::onPasswordChange,
-                label = { Text("密码") },
+                label = { Text(stringResource(R.string.login_password)) },
                 singleLine = true,
                 visualTransformation = PasswordVisualTransformation(),
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password, imeAction = ImeAction.Done),
@@ -62,7 +64,7 @@ fun LoginScreen(
             )
             uiState.errorMessage?.let { message ->
                 Spacer(modifier = Modifier.height(8.dp))
-                Text(text = message, color = MaterialTheme.colorScheme.error)
+                Text(text = message.asString(), color = MaterialTheme.colorScheme.error)
             }
             Spacer(modifier = Modifier.height(24.dp))
             Button(
@@ -73,12 +75,12 @@ fun LoginScreen(
                 if (uiState.isLoading) {
                     CircularProgressIndicator(modifier = Modifier.height(20.dp), strokeWidth = 2.dp)
                 } else {
-                    Text("登录")
+                    Text(stringResource(R.string.login_button))
                 }
             }
             Spacer(modifier = Modifier.height(12.dp))
             TextButton(onClick = onNavigateToRegister) {
-                Text("还没有账号？去注册")
+                Text(stringResource(R.string.login_go_register))
             }
         }
     }

@@ -1,8 +1,11 @@
 package jp.co.studio.kaka.ui.auth
 
+import java.io.IOException
+import jp.co.studio.kaka.R
 import jp.co.studio.kaka.domain.model.User
 import jp.co.studio.kaka.domain.repository.AuthRepository
 import jp.co.studio.kaka.util.ApiResult
+import jp.co.studio.kaka.util.UiText
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -18,7 +21,6 @@ import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
-import java.io.IOException
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class LoginViewModelTest {
@@ -81,7 +83,7 @@ class LoginViewModelTest {
 
         val state = viewModel.uiState.value
         assertFalse(state.loginSucceeded)
-        assertEquals("用户名或密码错误", state.errorMessage)
+        assertEquals(UiText.Dynamic("用户名或密码错误"), state.errorMessage)
     }
 
     @Test
@@ -94,7 +96,7 @@ class LoginViewModelTest {
         viewModel.login()
         advanceUntilIdle()
 
-        assertEquals("网络连接失败，请检查网络后重试", viewModel.uiState.value.errorMessage)
+        assertEquals(UiText.Resource(R.string.error_network), viewModel.uiState.value.errorMessage)
     }
 
     @Test
@@ -118,7 +120,7 @@ class LoginViewModelTest {
         viewModel.onPasswordChange("wrong-password")
         viewModel.login()
         advanceUntilIdle()
-        assertEquals("用户名或密码错误", viewModel.uiState.value.errorMessage)
+        assertEquals(UiText.Dynamic("用户名或密码错误"), viewModel.uiState.value.errorMessage)
 
         viewModel.onPasswordChange("wrong-password-2")
 

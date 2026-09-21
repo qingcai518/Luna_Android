@@ -1,0 +1,94 @@
+<resources>
+    <string name="app_name">Luna</string>
+
+    <string name="common_back">戻る</string>
+    <string name="common_retry">再試行</string>
+    <string name="common_delete">削除</string>
+    <string name="common_cancel">キャンセル</string>
+    <string name="common_follow_system">システムに従う</string>
+    <string name="error_network">ネットワーク接続に失敗しました。ネットワークをご確認のうえ、再度お試しください。</string>
+
+    <string name="nav_home">ホーム</string>
+    <string name="nav_search">検索</string>
+    <string name="nav_downloaded">ダウンロード済み</string>
+    <string name="nav_recommend">おすすめ</string>
+    <string name="nav_profile">マイページ</string>
+
+    <string name="login_username">ユーザー名</string>
+    <string name="login_password">パスワード</string>
+    <string name="login_button">ログイン</string>
+    <string name="login_go_register">アカウントをお持ちでないですか？登録する</string>
+
+    <string name="register_title">アカウント登録</string>
+    <string name="register_email">メールアドレス</string>
+    <string name="register_confirm_password">パスワード（確認）</string>
+    <string name="register_button">登録</string>
+    <string name="register_go_login">すでにアカウントをお持ちですか？ログイン</string>
+
+    <string name="download_action">ダウンロード</string>
+    <string name="download_done">ダウンロード済み</string>
+    <string name="download_failed">ダウンロード失敗</string>
+
+    <string name="downloaded_empty">まだダウンロードした曲がありません</string>
+    <string name="downloaded_delete_title">ダウンロードを削除</string>
+    <string name="downloaded_delete_confirm">この曲のダウンロードを削除しますか？</string>
+
+    <string name="home_artists">アーティスト</string>
+    <string name="home_categories">カテゴリー</string>
+
+    <string name="music_list_empty">曲がありません</string>
+
+    <string name="player_shuffle">シャッフル再生</string>
+    <string name="player_previous">前の曲</string>
+    <string name="player_play">再生</string>
+    <string name="player_pause">一時停止</string>
+    <string name="player_next">次の曲</string>
+    <string name="player_repeat_mode">リピートモード</string>
+    <string name="player_queue">再生キュー</string>
+    <string name="lyrics_empty">歌詞がありません</string>
+
+    <string name="profile_logout">ログアウト</string>
+    <string name="profile_downloaded_songs">ダウンロード済みの曲</string>
+    <string name="profile_logged_in">ログイン済み</string>
+    <string name="profile_not_logged_in">未ログイン</string>
+
+    <string name="recommend_refresh">入れ替える</string>
+    <string name="recommend_empty">おすすめがありません</string>
+
+    <string name="search_placeholder">曲、アーティスト、カテゴリーを検索…</string>
+    <string name="search_no_results">該当する結果が見つかりません</string>
+    <string name="search_type_song">楽曲</string>
+    <string name="search_type_region">地域</string>
+
+    <string name="settings_title">設定</string>
+    <string name="settings_appearance">外観</string>
+    <string name="settings_language">言語</string>
+    <string name="theme_light">ライト</string>
+    <string name="theme_dark">ダーク</string>
+
+    <string name="home_greeting_morning">おはようございます</string>
+    <string name="home_greeting_afternoon">こんにちは</string>
+    <string name="home_greeting_evening">こんばんは</string>
+    <string name="home_greeting_night">夜更けですね</string>
+    <string name="home_greeting_prompt">今日は何を聴きますか？</string>
+    <string name="home_hero_tag">AIのおすすめ</string>
+    <string name="home_downloads_title">ダウンロード</string>
+    <string name="home_downloads_subtitle">%1$d曲・オフライン再生可</string>
+
+    <string name="recommend_title">あなたへのおすすめ</string>
+    <string name="recommend_subtitle">曲をスワイプすると「興味なし」にできます</string>
+    <string name="recommend_loading">AIがあなたに合う曲を選んでいます…</string>
+    <string name="recommend_no_new">新しいおすすめはまだありません</string>
+
+    <string name="common_play_all">すべて再生</string>
+    <string name="common_shuffle">シャッフル</string>
+    <string name="common_more">その他の操作</string>
+
+    <string name="downloaded_offline_tag">オフライン再生可</string>
+    <string name="downloaded_summary">%1$d曲・%2$s</string>
+
+    <string name="profile_logout_confirm_title">ログアウトしますか？</string>
+    <string name="profile_logout_confirm_message">ログアウトすると、アカウント機能の利用には再度ログインが必要です。</string>
+
+    <string name="player_now_playing">再生中</string>
+</resources>

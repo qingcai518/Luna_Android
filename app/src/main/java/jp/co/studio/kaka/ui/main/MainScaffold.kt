@@ -4,6 +4,7 @@ import android.Manifest
 import android.os.Build
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -28,23 +29,25 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import jp.co.studio.kaka.R
 import jp.co.studio.kaka.ui.navigation.MainNavHost
 import jp.co.studio.kaka.ui.navigation.MainRoutes
 import jp.co.studio.kaka.ui.player.FullPlayerScreen
 import jp.co.studio.kaka.ui.player.MiniPlayerBar
 import jp.co.studio.kaka.ui.player.PlayerViewModel
 
-enum class MainTab(val label: String, val icon: ImageVector, val route: String) {
-    HOME("主页", Icons.Filled.Home, MainRoutes.HOME),
-    SEARCH("检索", Icons.Filled.Search, MainRoutes.SEARCH),
-    DOWNLOADED("已下载", Icons.Filled.CloudDownload, MainRoutes.DOWNLOADED),
-    RECOMMEND("推荐", Icons.Filled.Star, MainRoutes.RECOMMEND),
-    PROFILE("我的", Icons.Filled.Person, MainRoutes.PROFILE),
+enum class MainTab(@StringRes val labelRes: Int, val icon: ImageVector, val route: String) {
+    HOME(R.string.nav_home, Icons.Filled.Home, MainRoutes.HOME),
+    SEARCH(R.string.nav_search, Icons.Filled.Search, MainRoutes.SEARCH),
+    DOWNLOADED(R.string.nav_downloaded, Icons.Filled.CloudDownload, MainRoutes.DOWNLOADED),
+    RECOMMEND(R.string.nav_recommend, Icons.Filled.Star, MainRoutes.RECOMMEND),
+    PROFILE(R.string.nav_profile, Icons.Filled.Person, MainRoutes.PROFILE),
 }
 
 /**
@@ -69,8 +72,8 @@ fun MainScaffold(playerViewModel: PlayerViewModel = hiltViewModel()) {
         navigationSuiteItems = {
             MainTab.entries.forEach { tab ->
                 item(
-                    icon = { Icon(tab.icon, contentDescription = tab.label) },
-                    label = { Text(tab.label) },
+                    icon = { Icon(tab.icon, contentDescription = stringResource(tab.labelRes)) },
+                    label = { Text(stringResource(tab.labelRes)) },
                     selected = tab.route == currentRoute,
                     onClick = {
                         navController.navigate(tab.route) {
@@ -91,7 +94,9 @@ fun MainScaffold(playerViewModel: PlayerViewModel = hiltViewModel()) {
                 MiniPlayerBar(
                     music = music,
                     isPlaying = playerState.isPlaying,
+                    progress = if (playerState.durationMs > 0) playerState.positionMs.toFloat() / playerState.durationMs else 0f,
                     onPlayPauseClick = playerViewModel::playPause,
+                    onNextClick = playerViewModel::skipNext,
                     onBarClick = { showFullPlayer = true },
                 )
             }

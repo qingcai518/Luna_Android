@@ -3,6 +3,7 @@ package jp.co.studio.kaka.ui.auth
 import jp.co.studio.kaka.domain.model.User
 import jp.co.studio.kaka.domain.repository.AuthRepository
 import jp.co.studio.kaka.util.ApiResult
+import jp.co.studio.kaka.util.UiText
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -87,7 +88,7 @@ class RegisterViewModelTest {
 
         val state = viewModel.uiState.value
         assertFalse(state.registerSucceeded)
-        assertEquals("用户名已存在", state.errorMessage)
+        assertEquals(UiText.Dynamic("用户名已存在"), state.errorMessage)
     }
 
     @Test
@@ -127,7 +128,7 @@ class RegisterViewModelTest {
         fillValidForm(viewModel)
         viewModel.register()
         advanceUntilIdle()
-        assertEquals("用户名已存在", viewModel.uiState.value.errorMessage)
+        assertEquals(UiText.Dynamic("用户名已存在"), viewModel.uiState.value.errorMessage)
 
         viewModel.onUsernameChange("qingcai519")
 

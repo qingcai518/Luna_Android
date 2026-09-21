@@ -1,5 +1,6 @@
 package jp.co.studio.kaka.ui.recommend
 
+import jp.co.studio.kaka.R
 import jp.co.studio.kaka.domain.model.DownloadState
 import jp.co.studio.kaka.domain.model.DownloadedMusic
 import jp.co.studio.kaka.domain.model.Music
@@ -10,12 +11,15 @@ import jp.co.studio.kaka.domain.repository.RecommendationRepository
 import jp.co.studio.kaka.download.DownloadStateHolder
 import jp.co.studio.kaka.util.ApiResult
 import jp.co.studio.kaka.util.Constants
+import jp.co.studio.kaka.util.UiText
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.StandardTestDispatcher
+import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runCurrent
@@ -192,7 +196,7 @@ class RecommendViewModelTest {
         advanceUntilIdle()
 
         val state = viewModel.uiState.value
-        assertEquals("获取推荐失败", state.errorMessage)
+        assertEquals(UiText.Dynamic("获取推荐失败"), state.errorMessage)
         assertFalse(state.isLoading)
         assertFalse(state.isRefreshing)
     }
@@ -203,7 +207,7 @@ class RecommendViewModelTest {
         val viewModel = buildViewModel(repository)
         advanceUntilIdle()
 
-        assertEquals("网络连接失败，请检查网络后重试", viewModel.uiState.value.errorMessage)
+        assertEquals(UiText.Resource(R.string.error_network), viewModel.uiState.value.errorMessage)
     }
 
     @Test
@@ -240,5 +244,63 @@ class RecommendViewModelTest {
 
         assertEquals(music, downloadRepository.downloadedMusic)
         assertEquals(listOf(5L to "recommend_page"), eventRepository.trackedDownloads)
+    }
+
+    @Test
+    fun `changeBatch only spins the header button - isChangingBatch is true while in flight, then cleared`() = runTest(dispatcher) {
+        val repository = FakeRecommendationRepository(
+            listOf(
+                ApiResult.Success(listOf(recommendationFixture(1L))),
+                ApiResult.Success(listOf(recommendationFixture(2L))),
+            ),
+            delayMs = 100,
+        )
+        val viewModel = buildViewModel(repository)
+        advanceUntilIdle()
+
+        viewModel.changeBatch()
+        runCurrent()
+        assertTrue(viewModel.uiState.value.isChangingBatch)
+        assertFalse(viewModel.uiState.value.isRefreshing)
+
+        advanceUntilIdle()
+        assertFalse(viewModel.uiState.value.isChangingBatch)
+    }
+
+    @Test
+    fun `changeBatch that returns the same batch tells the user there is nothing new`() = runTest(dispatcher) {
+        // 后端把推荐缓存了 2 小时且不会失效：手动换一批拿到的是同一批，要如实提示，而不是看起来没反应
+        val same = ApiResult.Success(listOf(recommendationFixture(1L), recommendationFixture(2L)))
+        val viewModel = buildViewModel(FakeRecommendationRepository(listOf(same, same)))
+        val events = mutableListOf<UiText>()
+        // SharedFlow 没有订阅者时会丢弃发射的值：用 Unconfined 让收集协程立刻开始订阅
+        backgroundScope.launch(UnconfinedTestDispatcher(testScheduler)) { viewModel.events.collect { events += it } }
+        advanceUntilIdle()
+
+        viewModel.changeBatch()
+        advanceUntilIdle()
+
+        assertEquals(listOf<UiText>(UiText.Resource(R.string.recommend_no_new)), events)
+    }
+
+    @Test
+    fun `changeBatch that returns a different batch does not show the nothing-new message`() = runTest(dispatcher) {
+        val viewModel = buildViewModel(
+            FakeRecommendationRepository(
+                listOf(
+                    ApiResult.Success(listOf(recommendationFixture(1L))),
+                    ApiResult.Success(listOf(recommendationFixture(2L))),
+                ),
+            ),
+        )
+        val events = mutableListOf<UiText>()
+        // SharedFlow 没有订阅者时会丢弃发射的值：用 Unconfined 让收集协程立刻开始订阅
+        backgroundScope.launch(UnconfinedTestDispatcher(testScheduler)) { viewModel.events.collect { events += it } }
+        advanceUntilIdle()
+
+        viewModel.changeBatch()
+        advanceUntilIdle()
+
+        assertTrue(events.isEmpty())
     }
 }

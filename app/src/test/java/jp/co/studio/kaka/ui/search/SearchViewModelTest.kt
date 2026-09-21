@@ -10,6 +10,7 @@ import jp.co.studio.kaka.domain.repository.SearchRepository
 import jp.co.studio.kaka.download.DownloadStateHolder
 import jp.co.studio.kaka.util.ApiResult
 import jp.co.studio.kaka.util.SearchType
+import jp.co.studio.kaka.util.UiText
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -155,7 +156,7 @@ class SearchViewModelTest {
         viewModel.onKeywordChange("x")
         advanceUntilIdle()
 
-        assertEquals("搜索关键词不能为空", viewModel.uiState.value.errorMessage)
+        assertEquals(UiText.Dynamic("搜索关键词不能为空"), viewModel.uiState.value.errorMessage)
         assertFalse(viewModel.uiState.value.isLoading)
     }
 

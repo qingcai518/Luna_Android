@@ -1,6 +1,8 @@
 package jp.co.studio.kaka.ui.musiclist
 
 import androidx.lifecycle.SavedStateHandle
+import java.io.IOException
+import jp.co.studio.kaka.R
 import jp.co.studio.kaka.domain.model.DownloadState
 import jp.co.studio.kaka.domain.model.DownloadedMusic
 import jp.co.studio.kaka.domain.model.Music
@@ -9,6 +11,7 @@ import jp.co.studio.kaka.domain.repository.EventRepository
 import jp.co.studio.kaka.domain.repository.MusicRepository
 import jp.co.studio.kaka.download.DownloadStateHolder
 import jp.co.studio.kaka.util.ApiResult
+import jp.co.studio.kaka.util.UiText
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -25,7 +28,6 @@ import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
-import java.io.IOException
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class MusicListViewModelTest {
@@ -158,7 +160,7 @@ class MusicListViewModelTest {
         advanceUntilIdle()
 
         val state = viewModel.uiState.value
-        assertEquals("获取歌曲列表失败", state.errorMessage)
+        assertEquals(UiText.Dynamic("获取歌曲列表失败"), state.errorMessage)
         assertFalse(state.isLoading)
         assertTrue(state.musics.isEmpty())
     }
@@ -169,7 +171,7 @@ class MusicListViewModelTest {
         val viewModel = buildViewModel(savedStateHandle("artist", 1L), repository)
         advanceUntilIdle()
 
-        assertEquals("网络连接失败，请检查网络后重试", viewModel.uiState.value.errorMessage)
+        assertEquals(UiText.Resource(R.string.error_network), viewModel.uiState.value.errorMessage)
     }
 
     @Test
@@ -177,7 +179,7 @@ class MusicListViewModelTest {
         val repository = FakeMusicRepository(byArtistResult = ApiResult.Error("100050", "获取歌曲列表失败"))
         val viewModel = buildViewModel(savedStateHandle("artist", 1L), repository)
         advanceUntilIdle()
-        assertEquals("获取歌曲列表失败", viewModel.uiState.value.errorMessage)
+        assertEquals(UiText.Dynamic("获取歌曲列表失败"), viewModel.uiState.value.errorMessage)
 
         viewModel.load()
         advanceUntilIdle()

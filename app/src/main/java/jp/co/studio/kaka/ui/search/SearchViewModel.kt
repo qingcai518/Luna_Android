@@ -5,12 +5,14 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import jp.co.studio.kaka.domain.model.Music
 import jp.co.studio.kaka.domain.model.SearchResult
+import jp.co.studio.kaka.R
 import jp.co.studio.kaka.domain.repository.EventRepository
 import jp.co.studio.kaka.domain.repository.SearchRepository
 import jp.co.studio.kaka.download.DownloadStateHolder
 import jp.co.studio.kaka.util.ApiResult
 import jp.co.studio.kaka.util.Constants
 import jp.co.studio.kaka.util.SearchType
+import jp.co.studio.kaka.util.UiText
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -77,9 +79,9 @@ class SearchViewModel @Inject constructor(
         )
         when (result) {
             is ApiResult.Success -> _uiState.update { it.copy(isLoading = false, result = result.data) }
-            is ApiResult.Error -> _uiState.update { it.copy(isLoading = false, errorMessage = result.message) }
+            is ApiResult.Error -> _uiState.update { it.copy(isLoading = false, errorMessage = UiText.Dynamic(result.message)) }
             is ApiResult.NetworkError -> _uiState.update {
-                it.copy(isLoading = false, errorMessage = "网络连接失败，请检查网络后重试")
+                it.copy(isLoading = false, errorMessage = UiText.Resource(R.string.error_network))
             }
         }
     }

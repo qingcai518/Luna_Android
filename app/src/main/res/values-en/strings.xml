@@ -1,0 +1,94 @@
+<resources>
+    <string name="app_name">Luna</string>
+
+    <string name="common_back">Back</string>
+    <string name="common_retry">Retry</string>
+    <string name="common_delete">Delete</string>
+    <string name="common_cancel">Cancel</string>
+    <string name="common_follow_system">Follow System</string>
+    <string name="error_network">Network connection failed. Please check your network and try again.</string>
+
+    <string name="nav_home">Home</string>
+    <string name="nav_search">Search</string>
+    <string name="nav_downloaded">Downloaded</string>
+    <string name="nav_recommend">Recommend</string>
+    <string name="nav_profile">Profile</string>
+
+    <string name="login_username">Username</string>
+    <string name="login_password">Password</string>
+    <string name="login_button">Log In</string>
+    <string name="login_go_register">Don\'t have an account? Register</string>
+
+    <string name="register_title">Create Account</string>
+    <string name="register_email">Email</string>
+    <string name="register_confirm_password">Confirm Password</string>
+    <string name="register_button">Register</string>
+    <string name="register_go_login">Already have an account? Log in</string>
+
+    <string name="download_action">Download</string>
+    <string name="download_done">Downloaded</string>
+    <string name="download_failed">Download failed</string>
+
+    <string name="downloaded_empty">No downloaded songs yet</string>
+    <string name="downloaded_delete_title">Delete Download</string>
+    <string name="downloaded_delete_confirm">Delete this downloaded song?</string>
+
+    <string name="home_artists">Artists</string>
+    <string name="home_categories">Categories</string>
+
+    <string name="music_list_empty">No songs yet</string>
+
+    <string name="player_shuffle">Shuffle</string>
+    <string name="player_previous">Previous</string>
+    <string name="player_play">Play</string>
+    <string name="player_pause">Pause</string>
+    <string name="player_next">Next</string>
+    <string name="player_repeat_mode">Repeat Mode</string>
+    <string name="player_queue">Queue</string>
+    <string name="lyrics_empty">No lyrics available</string>
+
+    <string name="profile_logout">Log Out</string>
+    <string name="profile_downloaded_songs">Downloaded Songs</string>
+    <string name="profile_logged_in">Logged in</string>
+    <string name="profile_not_logged_in">Not logged in</string>
+
+    <string name="recommend_refresh">Refresh</string>
+    <string name="recommend_empty">No recommendations yet</string>
+
+    <string name="search_placeholder">Search songs, artists, categories…</string>
+    <string name="search_no_results">No results found</string>
+    <string name="search_type_song">Songs</string>
+    <string name="search_type_region">Region</string>
+
+    <string name="settings_title">Settings</string>
+    <string name="settings_appearance">Appearance</string>
+    <string name="settings_language">Language</string>
+    <string name="theme_light">Light</string>
+    <string name="theme_dark">Dark</string>
+
+    <string name="home_greeting_morning">Good morning</string>
+    <string name="home_greeting_afternoon">Good afternoon</string>
+    <string name="home_greeting_evening">Good evening</string>
+    <string name="home_greeting_night">Up late?</string>
+    <string name="home_greeting_prompt">What are you in the mood for?</string>
+    <string name="home_hero_tag">Picked by AI for you</string>
+    <string name="home_downloads_title">My Downloads</string>
+    <string name="home_downloads_subtitle">%1$d songs · Available offline</string>
+
+    <string name="recommend_title">For You</string>
+    <string name="recommend_subtitle">Swipe a song to mark it as not interested</string>
+    <string name="recommend_loading">AI is picking songs for you…</string>
+    <string name="recommend_no_new">No new recommendations right now</string>
+
+    <string name="common_play_all">Play All</string>
+    <string name="common_shuffle">Shuffle</string>
+    <string name="common_more">More actions</string>
+
+    <string name="downloaded_offline_tag">Available offline</string>
+    <string name="downloaded_summary">%1$d songs · %2$s</string>
+
+    <string name="profile_logout_confirm_title">Log out?</string>
+    <string name="profile_logout_confirm_message">You will need to log in again to use account features.</string>
+
+    <string name="player_now_playing">Now Playing</string>
+</resources>

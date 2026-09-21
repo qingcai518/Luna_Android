@@ -18,9 +18,11 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import jp.co.studio.kaka.R
 import jp.co.studio.kaka.domain.model.Artist
 import jp.co.studio.kaka.domain.model.Category
 import jp.co.studio.kaka.domain.model.DownloadState
@@ -38,14 +40,15 @@ fun SearchScreen(
     playerViewModel: PlayerViewModel = hiltViewModel(),
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    val playerState by playerViewModel.uiState.collectAsStateWithLifecycle()
 
     Column(modifier = Modifier.fillMaxSize()) {
-        TopAppBar(title = { Text("检索") })
+        TopAppBar(title = { Text(stringResource(R.string.nav_search)) })
         OutlinedTextField(
             value = uiState.keyword,
             onValueChange = viewModel::onKeywordChange,
             leadingIcon = { Icon(Icons.Filled.Search, contentDescription = null) },
-            placeholder = { Text("搜索歌曲、歌手、分类…") },
+            placeholder = { Text(stringResource(R.string.search_placeholder)) },
             singleLine = true,
             modifier = Modifier
                 .fillMaxWidth()
@@ -53,8 +56,8 @@ fun SearchScreen(
         )
 
         when {
-            uiState.errorMessage != null -> ErrorState(message = uiState.errorMessage!!, onRetry = {})
-            uiState.isEmpty -> EmptyState(message = "没有找到相关结果")
+            uiState.errorMessage != null -> ErrorState(message = uiState.errorMessage!!.asString(), onRetry = {})
+            uiState.isEmpty -> EmptyState(message = stringResource(R.string.search_no_results))
             else -> {
                 val musics = uiState.result.musics.orEmpty()
                 val artists = uiState.result.artists.orEmpty()
@@ -63,30 +66,31 @@ fun SearchScreen(
 
                 LazyColumn(modifier = Modifier.fillMaxSize()) {
                     if (musics.isNotEmpty()) {
-                        item { SectionHeader("歌曲") }
+                        item { SectionHeader(stringResource(R.string.search_type_song)) }
                         items(musics, key = { "music_${it.id}" }) { music ->
                             MusicRow(
                                 music = music,
                                 onClick = { playerViewModel.playQueue(musics, musics.indexOf(music)) },
                                 downloadState = uiState.downloadStates[music.id] ?: DownloadState.NotDownloaded,
                                 onDownloadClick = { viewModel.downloadMusic(music) },
+                                isCurrent = playerState.currentMusic?.id == music.id,
                             )
                         }
                     }
                     if (artists.isNotEmpty()) {
-                        item { SectionHeader("歌手") }
+                        item { SectionHeader(stringResource(R.string.home_artists)) }
                         items(artists, key = { "artist_${it.id}" }) { artist ->
                             SimpleResultRow(text = artist.name, onClick = { onArtistClick(artist) })
                         }
                     }
                     if (categories.isNotEmpty()) {
-                        item { SectionHeader("分类") }
+                        item { SectionHeader(stringResource(R.string.home_categories)) }
                         items(categories, key = { "category_${it.id}" }) { category ->
                             SimpleResultRow(text = category.name, onClick = { onCategoryClick(category) })
                         }
                     }
                     if (regions.isNotEmpty()) {
-                        item { SectionHeader("地区") }
+                        item { SectionHeader(stringResource(R.string.search_type_region)) }
                         // Region results are read-only - no click handler, matching iOS behavior.
                         items(regions, key = { it.regionCode ?: it.displayName }) { region ->
                             SimpleResultRow(text = region.displayName, onClick = null)

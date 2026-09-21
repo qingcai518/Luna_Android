@@ -1,3 +1,94 @@
 <resources>
     <string name="app_name">Luna</string>
+
+    <string name="common_back">返回</string>
+    <string name="common_retry">重试</string>
+    <string name="common_delete">删除</string>
+    <string name="common_cancel">取消</string>
+    <string name="common_follow_system">跟随系统</string>
+    <string name="error_network">网络连接失败，请检查网络后重试</string>
+
+    <string name="nav_home">主页</string>
+    <string name="nav_search">检索</string>
+    <string name="nav_downloaded">已下载</string>
+    <string name="nav_recommend">推荐</string>
+    <string name="nav_profile">我的</string>
+
+    <string name="login_username">用户名</string>
+    <string name="login_password">密码</string>
+    <string name="login_button">登录</string>
+    <string name="login_go_register">还没有账号？去注册</string>
+
+    <string name="register_title">注册账号</string>
+    <string name="register_email">邮箱</string>
+    <string name="register_confirm_password">确认密码</string>
+    <string name="register_button">注册</string>
+    <string name="register_go_login">已有账号？去登录</string>
+
+    <string name="download_action">下载</string>
+    <string name="download_done">已下载</string>
+    <string name="download_failed">下载失败</string>
+
+    <string name="downloaded_empty">还没有已下载的歌曲</string>
+    <string name="downloaded_delete_title">删除下载</string>
+    <string name="downloaded_delete_confirm">确定要删除这首已下载的歌曲吗？</string>
+
+    <string name="home_artists">歌手</string>
+    <string name="home_categories">分类</string>
+
+    <string name="music_list_empty">暂无歌曲</string>
+
+    <string name="player_shuffle">随机播放</string>
+    <string name="player_previous">上一首</string>
+    <string name="player_play">播放</string>
+    <string name="player_pause">暂停</string>
+    <string name="player_next">下一首</string>
+    <string name="player_repeat_mode">循环模式</string>
+    <string name="player_queue">播放队列</string>
+    <string name="lyrics_empty">暂无歌词</string>
+
+    <string name="profile_logout">登出</string>
+    <string name="profile_downloaded_songs">已下载歌曲</string>
+    <string name="profile_logged_in">已登录</string>
+    <string name="profile_not_logged_in">未登录</string>
+
+    <string name="recommend_refresh">换一批</string>
+    <string name="recommend_empty">暂无推荐</string>
+
+    <string name="search_placeholder">搜索歌曲、歌手、分类…</string>
+    <string name="search_no_results">没有找到相关结果</string>
+    <string name="search_type_song">歌曲</string>
+    <string name="search_type_region">地区</string>
+
+    <string name="settings_title">设置</string>
+    <string name="settings_appearance">外观</string>
+    <string name="settings_language">语言</string>
+    <string name="theme_light">浅色</string>
+    <string name="theme_dark">深色</string>
+
+    <string name="home_greeting_morning">早上好</string>
+    <string name="home_greeting_afternoon">下午好</string>
+    <string name="home_greeting_evening">晚上好</string>
+    <string name="home_greeting_night">夜深了</string>
+    <string name="home_greeting_prompt">今天想听点什么？</string>
+    <string name="home_hero_tag">AI 为你挑选</string>
+    <string name="home_downloads_title">我的下载</string>
+    <string name="home_downloads_subtitle">%1$d 首 · 可离线播放</string>
+
+    <string name="recommend_title">为你推荐</string>
+    <string name="recommend_subtitle">左滑歌曲可标记不喜欢</string>
+    <string name="recommend_loading">AI 正在为你挑选…</string>
+    <string name="recommend_no_new">暂时没有新的推荐</string>
+
+    <string name="common_play_all">播放全部</string>
+    <string name="common_shuffle">随机播放</string>
+    <string name="common_more">更多操作</string>
+
+    <string name="downloaded_offline_tag">离线可听</string>
+    <string name="downloaded_summary">%1$d 首 · %2$s</string>
+
+    <string name="profile_logout_confirm_title">退出登录？</string>
+    <string name="profile_logout_confirm_message">退出后需要重新登录才能使用账号功能。</string>
+
+    <string name="player_now_playing">正在播放</string>
 </resources>
