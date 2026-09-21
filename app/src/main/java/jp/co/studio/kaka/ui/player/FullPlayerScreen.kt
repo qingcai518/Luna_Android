@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -164,6 +165,20 @@ internal fun FullPlayerContent(
                         interactionSource = interactionSource,
                         thumbSize = DpSize(14.dp, 14.dp),
                         colors = SliderDefaults.colors(thumbColor = MaterialTheme.colorScheme.primary),
+                    )
+                },
+                // 默认轨道有 16dp 粗、带缺口和终点圆点；这里收成 4dp 细轨道
+                track = { sliderState ->
+                    SliderDefaults.Track(
+                        sliderState = sliderState,
+                        modifier = Modifier.height(4.dp),
+                        colors = SliderDefaults.colors(
+                            activeTrackColor = MaterialTheme.colorScheme.primary,
+                            inactiveTrackColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.18f),
+                        ),
+                        drawStopIndicator = null,
+                        thumbTrackGapSize = 0.dp,
+                        trackInsideCornerSize = 2.dp,
                     )
                 },
                 interactionSource = interactionSource,

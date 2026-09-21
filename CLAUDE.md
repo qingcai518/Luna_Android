@@ -15,7 +15,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - `applicationId` = `jp.co.studio.kaka`（和后端 Java 包名一致），`minSdk 24`，`targetSdk 36`。版本统一在 `gradle/libs.versions.toml`。
 - 后端地址是 `app/build.gradle.kts` 里的 `API_BASE_URL`（`BuildConfig`），和其他客户端同一个 `/luna/api`。
 - 首次构建需要联网拉依赖，离线环境下 Gradle 会失败。
-- 没有配置命令行可用的模拟器时，UI 只能靠编译 + 单元测试兜底（磁盘不足时 AVD 起不来）。
+- 模拟器 `Pixel_6_Pro_API_31` 需要约 7.4 GB 空闲磁盘才能启动（数据分区大小启动时会被设备档案重写，改 `config.ini` 和 `-partition-size` 都没用），空间不够时直接报 `Not enough space to create userdata partition`。
 
 ## 分层与依赖方向
 
@@ -54,6 +54,7 @@ ViewModel 里**不要**持有 `Context` 或直接拼本地化字符串。错误/
 
 - `player/PlaybackService`（Media3 `MediaSessionService`）持有 ExoPlayer，系统通知 / 锁屏控制由 Media3 自动生成，不要手写 `NotificationCompat`。UI 通过 `MediaControllerRepository` 拿状态和发命令，`PlayerViewModel` / `FullPlayerViewModel` 只是它的包装。
 - `PlayerUiState` 是全局播放状态（队列、当前下标、位置、随机 / 循环）。「正在播放」的高亮统一用 `playerState.currentMusic?.id` 和行的歌曲 id 比较。
+- 全屏播放页放在 `MainScaffold` 的 `ModalBottomSheet`（高度 0.92）里，**必须** `skipPartiallyExpanded = true`：默认会先只展开半屏，歌词和控制区都在屏幕外。进度条用自定义 4dp 轨道（默认是 16dp 粗、带缺口和终点圆点）。
 - 全屏播放页 `ui/player/FullPlayerScreen.kt`：唱片尺寸由 `BoxWithConstraints` 按可用高度取 140–300dp；歌词区 `weight(1f)` 吃剩余高度，`LyricsView` 按离当前行的距离做透明度衰减。迷你播放条 `MiniPlayerBar` 的进度由 `MainScaffold` 用 `positionMs / durationMs` 传入。
 - `AutoSkipHandler`：ExoPlayer 默认不会跳过播放失败的曲目，它记录本次会话里失败过的队列下标，挑下一个没试过的（会绕回队首）；每首都失败过一次后返回 `null`，调用方据此停止，避免死循环。
 
@@ -70,5 +71,5 @@ ViewModel 里**不要**持有 `Context` 或直接拼本地化字符串。错误/
 
 ## 已知限制
 
-- Compose 界面目前只做过编译验证，没有截图 / UI 测试。
+- 界面没有自动化 UI 测试。做过一次模拟器截图检查：用临时的 debug Activity 直接渲染各 `xxxContent`（喂假数据，深/浅色主题），检查完已删除。这类 harness 没有 `NavigationSuiteScaffold`，所以看不到底部导航栏和状态栏边距的真实效果——各页真实入口的 `XxxScreen` 已经自己加了 `statusBarsPadding()`。
 - 还没有做的：微信登录、按自然语言描述推荐（后端有 `POST /recommendations/prompt`）。

@@ -19,6 +19,7 @@ import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.ModalBottomSheet
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.material3.Text
 import androidx.compose.material3.adaptive.navigationsuite.NavigationSuiteScaffold
 import androidx.compose.runtime.Composable
@@ -104,7 +105,11 @@ fun MainScaffold(playerViewModel: PlayerViewModel = hiltViewModel()) {
     }
 
     if (showFullPlayer) {
-        ModalBottomSheet(onDismissRequest = { showFullPlayer = false }) {
+        // 默认会先只展开半屏，标题以下的歌词和控制区都在屏幕外；直接展开到内容高度。
+        ModalBottomSheet(
+            onDismissRequest = { showFullPlayer = false },
+            sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true),
+        ) {
             Box(modifier = Modifier.fillMaxWidth().fillMaxHeight(0.92f)) {
                 FullPlayerScreen()
             }
